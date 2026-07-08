@@ -1,1 +1,110 @@
-https://sub-server.v2rayssr.net/sub?target=clash&url=vless%3A%2F%2Ff8b371dc-7356-4aea-e667-16df23c6404c%40107.175.83.137%3A443%3Fencryption%3Dnone%26flow%3Dxtls-rprx-vision%26security%3Dreality%26sni%3Dwww.apple.com%26fp%3Dchrome%26pbk%3DCx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM%26sid%3D60%26type%3Dtcp%26headerType%3Dnone%23US_reality%7Cvless%3A%2F%2Ff8b371dc-7356-4aea-e667-16df23c6404c%4045.207.157.148%3A443%3Fencryption%3Dnone%26flow%3Dxtls-rprx-vision%26security%3Dreality%26sni%3Dwww.apple.com%26fp%3Dchrome%26pbk%3DCx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM%26sid%3D60%26type%3Dtcp%26headerType%3Dnone%23hkg22_reality%7Cvless%3A%2F%2Ff8b371dc-7356-4aea-e667-16df23c6404c%40103.232.213.199%3A443%3Fencryption%3Dnone%26flow%3Dxtls-rprx-vision%26security%3Dreality%26sni%3Dwww.apple.com%26fp%3Dchrome%26pbk%3DCx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM%26sid%3D60%26type%3Dtcp%26headerType%3Dnone%23jppro4_reality&config=https%3A%2F%2Fraw.githubusercontent.com%2FAethersailor%2FCustom_OpenClash_Rules%2Fmain%2Fcfg%2FCustom_Clash.ini&insert=false&emoji=true&tfo=false&scv=true&fdn=false&expand=false&sort=false&append_type=false&new_name=true
+#=======================================================
+# 基础配置信息
+#=======================================================
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  mock-dns-regic: true
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  fallback:
+    - 8.8.8.8
+    - 1.1.1.1
+
+#=======================================================
+# 节点配置（你的 3 个 VLESS-REALITY 节点）
+#=======================================================
+proxies:
+  - name: "🇺🇸 US_reality"
+    type: vless
+    server: 107.175.83.137
+    port: 443
+    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: www.apple.com
+    network: tcp
+    reality-opts:
+      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+      short-id: 60
+    client-fingerprint: chrome
+
+  - name: "🇭🇰 hkg22_reality"
+    type: vless
+    server: 45.207.157.148
+    port: 443
+    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: www.apple.com
+    network: tcp
+    reality-opts:
+      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+      short-id: 60
+    client-fingerprint: chrome
+
+  - name: "🇯🇵 jppro4_reality"
+    type: vless
+    server: 103.232.213.199
+    port: 443
+    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: www.apple.com
+    network: tcp
+    reality-opts:
+      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+      short-id: 60
+    client-fingerprint: chrome
+
+#=======================================================
+# 策略组配置
+#=======================================================
+proxy-groups:
+  # 默认主代理控制
+  - name: 🚀 节点选择
+    type: select
+    proxies:
+      - 自动选择（延迟最低）
+      - 🇭🇰 hkg22_reality
+      - 🇯🇵 jppro4_reality
+      - 🇺🇸 US_reality
+      - DIRECT
+
+  # 自动测速延迟策略组
+  - name: 自动选择（延迟最低）
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies:
+      - 🇭🇰 hkg22_reality
+      - 🇯🇵 jppro4_reality
+      - 🇺🇸 US_reality
+
+#=======================================================
+# 路由分流规则（GEO 基础规则）
+#=======================================================
+rules:
+  # 局域网和本地流量直连
+  - GEOIP,lan,DIRECT,no-resolve
+  
+  # 中国大陆 IP 和 域名直连（绕过代理）
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT
+
+  # 兜底规则：其余未匹配到的海外流量全部走节点选择
+  - MATCH,🚀 节点选择
