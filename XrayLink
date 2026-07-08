@@ -1,29 +1,9 @@
-#=======================================================
-# 基础配置信息
-#=======================================================
-port: 7890
-socks-port: 7891
-allow-lan: true
+# 必须的基础运行参数
 mode: rule
-log-level: info
-ipv6: false
-external-controller: 127.0.0.1:9090
+allow-lan: true
+flight: false
 
-dns:
-  enable: true
-  mock-dns-regic: true
-  listen: 0.0.0.0:53
-  enhanced-mode: redir-host
-  nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-  fallback:
-    - 8.8.8.8
-    - 1.1.1.1
-
-#=======================================================
-# 节点配置（你的 3 个 VLESS-REALITY 节点）
-#=======================================================
+# 1. 节点配置（你的核心节点）
 proxies:
   - name: "🇺🇸 US_reality"
     type: vless
@@ -70,41 +50,16 @@ proxies:
       short-id: 60
     client-fingerprint: chrome
 
-#=======================================================
-# 策略组配置
-#=======================================================
+# 2. 最基础的控制面板（必须保留，否则客户端没法选节点）
 proxy-groups:
-  # 默认主代理控制
   - name: 🚀 节点选择
     type: select
     proxies:
-      - 自动选择（延迟最低）
       - 🇭🇰 hkg22_reality
       - 🇯🇵 jppro4_reality
       - 🇺🇸 US_reality
       - DIRECT
 
-  # 自动测速延迟策略组
-  - name: 自动选择（延迟最低）
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    proxies:
-      - 🇭🇰 hkg22_reality
-      - 🇯🇵 jppro4_reality
-      - 🇺🇸 US_reality
-
-#=======================================================
-# 路由分流规则（GEO 基础规则）
-#=======================================================
+# 3. 极简兜底规则
 rules:
-  # 局域网和本地流量直连
-  - GEOIP,lan,DIRECT,no-resolve
-  
-  # 中国大陆 IP 和 域名直连（绕过代理）
-  - GEOSITE,cn,DIRECT
-  - GEOIP,CN,DIRECT
-
-  # 兜底规则：其余未匹配到的海外流量全部走节点选择
   - MATCH,🚀 节点选择
