@@ -1,65 +1,593 @@
-# 必须的基础运行参数
 mode: rule
-allow-lan: true
-flight: false
-
-# 1. 节点配置（你的核心节点）
+mixed-port: 7897
+allow-lan: false
+log-level: info
+ipv6: true
+external-controller: ''
+secret: set-your-secret
+unified-delay: true
+profile:
+  store-selected: true
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+external-controller-pipe: \\.\pipe\verge-mihomo
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  strict-route: false
+  auto-detect-interface: true
+  dns-hijack:
+  - any:53
+external-controller-cors:
+  allow-private-network: true
+  allow-origins:
+  - tauri://localhost
+  - http://tauri.localhost
+  - https://yacd.metacubex.one
+  - https://metacubex.github.io
+  - https://board.zash.run.place
 proxies:
-  - name: "🇺🇸 US_reality"
-    type: vless
-    server: 107.175.83.137
-    port: 443
-    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-    udp: true
-    tls: true
-    flow: xtls-rprx-vision
-    servername: www.apple.com
-    network: tcp
-    reality-opts:
-      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-      short-id: 60
-    client-fingerprint: chrome
-
-  - name: "🇭🇰 hkg22_reality"
-    type: vless
-    server: 45.207.157.148
-    port: 443
-    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-    udp: true
-    tls: true
-    flow: xtls-rprx-vision
-    servername: www.apple.com
-    network: tcp
-    reality-opts:
-      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-      short-id: 60
-    client-fingerprint: chrome
-
-  - name: "🇯🇵 jppro4_reality"
-    type: vless
-    server: 103.232.213.199
-    port: 443
-    uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-    udp: true
-    tls: true
-    flow: xtls-rprx-vision
-    servername: www.apple.com
-    network: tcp
-    reality-opts:
-      public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-      short-id: 60
-    client-fingerprint: chrome
-
-# 2. 最基础的控制面板（必须保留，否则客户端没法选节点）
+- name: US_reality
+  server: 107.175.83.137
+  port: 443
+  client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  network: tcp
+  reality-opts:
+    public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+    short-id: 60
+  servername: www.apple.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+  xudp: true
+  skip-cert-verify: true
+  tfo: false
+- name: hkg22_reality
+  server: 45.207.157.148
+  port: 443
+  client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  network: tcp
+  reality-opts:
+    public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+    short-id: 60
+  servername: www.apple.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+  xudp: true
+  skip-cert-verify: true
+  tfo: false
+- name: jppro4_reality
+  server: 103.232.213.199
+  port: 443
+  client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  network: tcp
+  reality-opts:
+    public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+    short-id: 60
+  servername: www.apple.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
+  xudp: true
+  skip-cert-verify: true
+  tfo: false
 proxy-groups:
-  - name: 🚀 节点选择
-    type: select
-    proxies:
-      - 🇭🇰 hkg22_reality
-      - 🇯🇵 jppro4_reality
-      - 🇺🇸 US_reality
-      - DIRECT
-
-# 3. 极简兜底规则
+- name: 🚀 手动选择
+  type: select
+  proxies:
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: ♻️ 自动选择
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 💬 即时通讯
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - 🎯 全球直连
+- name: 🌐 社交媒体
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - 🎯 全球直连
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🚀 GitHub
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - 🎯 全球直连
+- name: 🤖 ChatGPT
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🤖 AI服务
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎶 TikTok
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 📹 YouTube
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 Netflix
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 DisneyPlus
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 HBO
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 PrimeVideo
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 AppleTV+
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇸🇬 新加坡节点
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - 🎯 全球直连
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎥 Emby
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🎯 全球直连
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎻 Spotify
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🎯 全球直连
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 📺 Bahamut
+  type: select
+  proxies:
+  - 🇼🇸 台湾节点
+  - 🚀 手动选择
+  - 🎯 全球直连
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🌎 国外媒体
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🛒 国外电商
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🎯 全球直连
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 📢 谷歌FCM
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+- name: 🇬 谷歌服务
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🍎 苹果服务
+  type: select
+  proxies:
+  - 🎯 全球直连
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: Ⓜ️ 微软服务
+  type: select
+  proxies:
+  - 🎯 全球直连
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎮 游戏平台
+  type: select
+  proxies:
+  - 🎯 全球直连
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🎮 Steam
+  type: select
+  proxies:
+  - 🎯 全球直连
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🚀 测速工具
+  type: select
+  proxies:
+  - 🎯 全球直连
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🐟 漏网之鱼
+  type: select
+  proxies:
+  - 🚀 手动选择
+  - ♻️ 自动选择
+  - 🎯 全球直连
+  - 🇭🇰 香港节点
+  - 🇺🇸 美国节点
+  - 🇯🇵 日本节点
+  - 🇸🇬 新加坡节点
+  - 🇼🇸 台湾节点
+  - 🇰🇷 韩国节点
+  - US_reality
+  - hkg22_reality
+  - jppro4_reality
+- name: 🔀 非标端口
+  type: select
+  proxies:
+  - 🐟 漏网之鱼
+  - 🎯 全球直连
+- name: 🇭🇰 香港节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - hkg22_reality
+- name: 🇺🇸 美国节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - US_reality
+- name: 🇯🇵 日本节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - jppro4_reality
+- name: 🇸🇬 新加坡节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - DIRECT
+- name: 🇼🇸 台湾节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - DIRECT
+- name: 🇰🇷 韩国节点
+  type: url-test
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+  - DIRECT
+- name: 🎯 全球直连
+  type: select
+  proxies:
+  - DIRECT
+rule-providers:
+  Custom_Direct_Domain:
+    type: http
+    behavior: domain
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Domain.yaml
+    path: ./providers/2305457515016618925_domain.yaml
+    interval: 28800
+  Custom_Direct_Classical_IP:
+    type: http
+    behavior: classical
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical_IP.yaml
+    path: ./providers/15204165614954008964.yaml
+    interval: 28800
+  Custom_Proxy_Domain:
+    type: http
+    behavior: domain
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Domain.yaml
+    path: ./providers/10543794580940256312_domain.yaml
+    interval: 28800
+  Custom_Proxy_Classical_IP:
+    type: http
+    behavior: classical
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Classical_IP.yaml
+    path: ./providers/3673053372641237649.yaml
+    interval: 28800
+  Steam_CDN_Classical:
+    type: http
+    behavior: classical
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_Classical.yaml
+    path: ./providers/13268481674871578153.yaml
+    interval: 28800
+  Custom_Port_Direct:
+    type: http
+    behavior: classical
+    url: https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Port_Direct.yaml
+    path: ./providers/2451647452112462632.yaml
+    interval: 28800
 rules:
-  - MATCH,🚀 节点选择
+- GEOSITE,private,🎯 全球直连
+- GEOIP,private,🎯 全球直连,no-resolve
+- RULE-SET,Custom_Direct_Domain,🎯 全球直连
+- RULE-SET,Custom_Direct_Classical_IP,🎯 全球直连
+- RULE-SET,Custom_Proxy_Domain,🚀 手动选择
+- RULE-SET,Custom_Proxy_Classical_IP,🚀 手动选择
+- GEOSITE,google-cn,🎯 全球直连
+- GEOSITE,category-games@cn,🎯 全球直连
+- RULE-SET,Steam_CDN_Classical,🎯 全球直连
+- GEOSITE,category-game-platforms-download,🎯 全球直连
+- GEOSITE,category-public-tracker,🎯 全球直连
+- GEOSITE,category-communication,💬 即时通讯
+- GEOSITE,category-social-media-!cn,🌐 社交媒体
+- GEOSITE,openai,🤖 ChatGPT
+- GEOSITE,category-ai-!cn,🤖 AI服务
+- GEOSITE,github,🚀 GitHub
+- GEOSITE,category-speedtest,🚀 测速工具
+- GEOSITE,steam,🎮 Steam
+- GEOSITE,youtube,📹 YouTube
+- GEOSITE,apple-tvplus,🎥 AppleTV+
+- GEOSITE,apple,🍎 苹果服务
+- GEOSITE,microsoft,Ⓜ️ 微软服务
+- GEOSITE,googlefcm,📢 谷歌FCM
+- GEOSITE,google,🇬 谷歌服务
+- GEOSITE,tiktok,🎶 TikTok
+- GEOSITE,netflix,🎥 Netflix
+- GEOSITE,disney,🎥 DisneyPlus
+- GEOSITE,hbo,🎥 HBO
+- GEOSITE,primevideo,🎥 PrimeVideo
+- GEOSITE,category-emby,🎥 Emby
+- GEOSITE,spotify,🎻 Spotify
+- GEOSITE,bahamut,📺 Bahamut
+- GEOSITE,category-games,🎮 游戏平台
+- GEOSITE,category-entertainment,🌎 国外媒体
+- GEOSITE,category-ecommerce,🛒 国外电商
+- GEOSITE,gfw,🚀 手动选择
+- GEOIP,telegram,💬 即时通讯,no-resolve
+- GEOIP,twitter,🌐 社交媒体,no-resolve
+- GEOIP,facebook,🌐 社交媒体,no-resolve
+- GEOIP,google,🇬 谷歌服务,no-resolve
+- GEOIP,netflix,🎥 Netflix,no-resolve
+- GEOSITE,cn,🎯 全球直连
+- GEOIP,cn,🎯 全球直连,no-resolve
+- RULE-SET,Custom_Port_Direct,🔀 非标端口
+- MATCH,🐟 漏网之鱼
