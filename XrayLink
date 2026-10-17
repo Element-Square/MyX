@@ -41,58 +41,55 @@ external-controller-cors:
   - https://board.zash.run.place
 proxies:
 - name: US_reality
+  type: vless
   server: 107.175.83.137
   port: 443
-  client-fingerprint: firefox
-  encryption: none
-  flow: xtls-rprx-vision
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
   network: tcp
+  tls: true
+  udp: true
+  flow: xtls-rprx-vision
+  servername: www.apple.com
+  client-fingerprint: firefox
   reality-opts:
     public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-    short-id: 60
-  servername: www.apple.com
-  tls: true
-  type: vless
-  udp: true
-  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-  xudp: true
-  skip-cert-verify: true
+    short-id: "60"
+  packet-encoding: xudp
+  skip-cert-verify: false
   tfo: false
 - name: hkg22_reality
+  type: vless
   server: 45.207.157.148
   port: 443
-  client-fingerprint: firefox
-  encryption: none
-  flow: xtls-rprx-vision
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
   network: tcp
+  tls: true
+  udp: true
+  flow: xtls-rprx-vision
+  servername: www.apple.com
+  client-fingerprint: firefox
   reality-opts:
     public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-    short-id: 60
-  servername: www.apple.com
-  tls: true
-  type: vless
-  udp: true
-  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-  xudp: true
-  skip-cert-verify: true
+    short-id: "60"
+  packet-encoding: xudp
+  skip-cert-verify: false
   tfo: false
 - name: KOR_reality
+  type: vless
   server: 23.27.1.238
   port: 443
-  client-fingerprint: firefox
-  encryption: none
-  flow: xtls-rprx-vision
+  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
   network: tcp
+  tls: true
+  udp: true
+  flow: xtls-rprx-vision
+  servername: www.apple.com
+  client-fingerprint: firefox
   reality-opts:
     public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-    short-id: 60
-  servername: www.apple.com
-  tls: true
-  type: vless
-  udp: true
-  uuid: f8b371dc-7356-4aea-e667-16df23c6404c
-  xudp: true
-  skip-cert-verify: true
+    short-id: "60"
+  packet-encoding: xudp
+  skip-cert-verify: false
   tfo: false
 proxy-groups:
 - name: 🚀 手动选择
