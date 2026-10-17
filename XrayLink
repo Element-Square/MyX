@@ -50,7 +50,7 @@ proxies:
   reality-opts:
     public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
     short-id: 60
-  servername: lovelive-anime.jp
+  servername: www.apple.com
   tls: true
   type: vless
   udp: true
