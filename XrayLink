@@ -6,7 +6,6 @@ ipv6: false
 external-controller: ''
 secret: set-your-secret
 unified-delay: true
-tcp-concurrent: true
 profile:
   store-selected: true
 dns:
@@ -14,9 +13,6 @@ dns:
   ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  default-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
   nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -26,35 +22,23 @@ dns:
   fallback-filter:
     geoip: true
     geoip-code: CN
-  fake-ip-filter:
-    - '*.lan'
-    - '*.local'
-    - localhost.ptlogin2.qq.com
-    - '+.stun.*'
-    - '+.msftconnecttest.com'
-    - '+.msftncsi.com'
-    - 'time.*.com'
-    - 'time.*.gov'
-    - 'time.*.apple.com'
-    - '*.pool.ntp.org'
 external-controller-pipe: \\.\pipe\verge-mihomo
 tun:
   enable: true
   stack: system
   auto-route: true
-  strict-route: true
+  strict-route: false
   auto-detect-interface: true
-  endpoint-independent-nat: true
   dns-hijack:
-    - any:53
+  - any:53
 external-controller-cors:
   allow-private-network: true
   allow-origins:
-    - tauri://localhost
-    - http://tauri.localhost
-    - https://yacd.metacubex.one
-    - https://metacubex.github.io
-    - https://board.zash.run.place
+  - tauri://localhost
+  - http://tauri.localhost
+  - https://yacd.metacubex.one
+  - https://metacubex.github.io
+  - https://board.zash.run.place
 proxies:
 - name: JP_reality
   server: 136.0.11.125
@@ -118,6 +102,9 @@ proxy-groups:
   - 🇭🇰 香港节点
   - 🇯🇵 日本节点
   - 🇺🇸 美国节点
+  - hk_reality
+  - JP_reality
+  - US_reality
   - 🎯 全球直连
 
 - name: ♻️ 自动选择
@@ -153,7 +140,6 @@ proxy-groups:
 rules:
 - GEOSITE,private,🎯 全球直连
 - GEOIP,private,🎯 全球直连,no-resolve
-- GEOSITE,category-public-tracker,🎯 全球直连
 - GEOSITE,cn,🎯 全球直连
 - GEOIP,cn,🎯 全球直连,no-resolve
 - MATCH,🚀 手动选择
