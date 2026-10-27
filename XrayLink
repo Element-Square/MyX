@@ -87,16 +87,16 @@ proxies:
   skip-cert-verify: true
   tfo: false
 - name: hk_reality
-  server: 45.207.157.148
-  port: 443
+  server: 69.165.65.171
+  port: 8443
   client-fingerprint: firefox
   encryption: none
   flow: xtls-rprx-vision
   network: tcp
   reality-opts:
-    public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
+    public-key: 942St7d4GVR3-HTR8Xpxl3NUL9VhoyTpwpk5ylkrCw8
     short-id: 60
-  servername: www.apple.com
+  servername: www.cloudflare.com
   tls: true
   type: vless
   udp: true
