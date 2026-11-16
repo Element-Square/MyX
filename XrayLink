@@ -50,24 +50,6 @@ external-controller-cors:
   - https://metacubex.github.io
   - https://board.zash.run.place
 proxies:
-- name: JP_reality
-  server: 136.0.11.125
-  port: 443
-  client-fingerprint: firefox
-  encryption: none
-  flow: xtls-rprx-vision
-  network: tcp
-  reality-opts:
-    public-key: Cx1KQzhV35ZzUM5qcyoY2UKc6fiEapoGW5iDfE5SkEM
-    short-id: 60
-  servername: www.apple.com
-  tls: true
-  type: vless
-  udp: true
-  uuid: f8b371dc-7356-4aea-e667-16df23c6404d
-  xudp: true
-  skip-cert-verify: true
-  tfo: false
 - name: US_reality
   server: 107.175.83.137
   port: 443
@@ -110,10 +92,8 @@ proxy-groups:
   proxies:
   - ♻️ 自动选择
   - 🇭🇰 香港节点
-  - 🇯🇵 日本节点
   - 🇺🇸 美国节点
   - hk_reality
-  - JP_reality
   - US_reality
   - 🎯 全球直连
 
@@ -124,18 +104,12 @@ proxy-groups:
   tolerance: 50
   proxies:
   - hk_reality
-  - JP_reality
   - US_reality
 
 - name: 🇭🇰 香港节点
   type: select
   proxies:
   - hk_reality
-
-- name: 🇯🇵 日本节点
-  type: select
-  proxies:
-  - JP_reality
 
 - name: 🇺🇸 美国节点
   type: select
