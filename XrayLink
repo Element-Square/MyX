@@ -88,7 +88,7 @@ proxies:
   tfo: false
 - name: hk_reality
   server: 69.165.65.171
-  port: 4433
+  port: 443
   client-fingerprint: firefox
   encryption: none
   flow: xtls-rprx-vision
